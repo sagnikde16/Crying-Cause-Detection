@@ -1,0 +1,12 @@
+flask
+flask-cors
+librosa
+scikit-learn
+kagglehub
+soundfile
+numpy
+joblib
+pandas
+seaborn
+matplotlib
+tqdm
