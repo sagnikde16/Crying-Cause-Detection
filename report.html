@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Crying Cause Detection: Project Phase 1 Report</title>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+        color: #000000;
+        background-color: #ffffff;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px;
+    }
+    h1 {
+        font-family: 'Arial', sans-serif;
+        font-size: 24pt;
+        text-align: center;
+        margin-bottom: 24px;
+        color: #000000;
+    }
+    h2 {
+        font-family: 'Arial', sans-serif;
+        font-size: 18pt;
+        margin-top: 24px;
+        margin-bottom: 16px;
+        border-bottom: 1px solid #cccccc;
+        padding-bottom: 4px;
+        color: #000000;
+        background-color: transparent;
+    }
+    h3 {
+        font-family: 'Arial', sans-serif;
+        font-size: 14pt;
+        margin-top: 20px;
+        margin-bottom: 12px;
+        color: #000000;
+    }
+    p {
+        font-family: 'Arial', sans-serif;
+        font-size: 11pt;
+        margin-bottom: 12px;
+        color: #000000;
+    }
+    ul, ol {
+        font-family: 'Arial', sans-serif;
+        font-size: 11pt;
+        margin-bottom: 12px;
+        color: #000000;
+    }
+    li {
+        margin-bottom: 6px;
+        color: #000000;
+    }
+    strong {
+        font-weight: bold;
+    }
+    em {
+        font-style: italic;
+    }
+    code {
+        font-family: 'Courier New', Courier, monospace;
+        background-color: transparent;
+        color: #000000;
+        padding: 2px 4px;
+        font-size: 10pt;
+    }
+    pre {
+        background-color: #f4f4f4;
+        padding: 12px;
+        border-radius: 4px;
+        overflow-x: auto;
+    }
+    pre code {
+        background-color: transparent;
+        padding: 0;
+        color: #000000;
+    }
+</style>
+</head>
+<body>
+
+<h1>Crying Cause Detection: Project Phase 1 Report</h1>
+
+<h2>1. Introduction and The Barebones Idea</h2>
+
+<p>Infant crying is the primary mode of communication for babies, and interpreting the cause—whether it is hunger, pain, discomfort, or something else—can be a daunting challenge for parents and caregivers. The primary idea behind this project is to develop a machine learning-based system capable of analyzing infant crying audio to classify the underlying cause. By providing a relatively reliable indicator of <em>why</em> an infant is crying, this tool aims to alleviate stress for parents and help address the infant's needs more effectively.</p>
+
+<p>In Phase 1, the objective is to build a foundational model that processes audio signals and categorizes them into distinct classes based on their acoustic properties.</p>
+
+<h2>2. Classification Labels and Mel Spectrogram Representations</h2>
+
+<p>Based on the dataset, we aim to categorize the cries into distinct labels, typically including:</p>
+
+<ol>
+    <li><strong>Hungry:</strong> Often features a rhythmic, repetitive pattern. The pitch might be moderate and consistent.</li>
+    <li><strong>Pain:</strong> Usually characterized by a sudden, high-pitched, and intense sound, followed by a brief pause (breath-holding), and then another loud wail.</li>
+    <li><strong>Discomfort (e.g., wet diaper):</strong> May be less intense than a pain cry, often sounding like a grumble or whine that builds up over time.</li>
+    <li><strong>Tired/Sleepy:</strong> Tends to be a softer, more breathy cry, interspersed with yawns or whimpers.</li>
+</ol>
+
+<p>The core of the audio analysis relies on transforming raw audio signals into <strong>Mel Spectrograms</strong>. A Mel Spectrogram is a visual representation of the audio's frequency spectrum over time, mapped to the Mel scale (which approximating human hearing).</p>
+
+<h3>How Mel Spectrograms Differ by Label</h3>
+<ul>
+    <li><strong>Hungry:</strong> The spectrogram often shows distinct, evenly spaced energy bands, reflecting the rhythmic nature of the cry.</li>
+    <li><strong>Pain:</strong> The spectrogram will present sudden spikes in high-frequency energy, followed by brief periods of low energy (the pause).</li>
+    <li><strong>Discomfort:</strong> Shows a gradual increase in energy, often concentrated in mid-to-high frequency bands, with less rhythmicity than the hungry cry.</li>
+    <li><strong>Tired/Sleepy:</strong> Characterized by lower overall energy and flatter, less distinct frequency peaks compared to pain or hunger cries.</li>
+</ul>
+
+<p><em>(Note: Insert plots showing typical Mel Spectrograms for each class here.)</em></p>
+
+<h2>3. Data Source and Datasets</h2>
+
+<p>The effectiveness of the model relies heavily on the quality and diversity of the audio data. Our primary datasets for this project are sourced from established infant cry repositories and crowdsourced contributions where the cause of crying is annotated.</p>
+
+<ul>
+    <li><strong>Donate-a-Cry Dataset:</strong> A comprehensive dataset featuring audio recordings of infant cries labeled with reasons such as hunger, pain, tired, belly pain, and burping.</li>
+    <li><strong>(Mention any other specific datasets used, e.g., ESC-50 if adapted, or custom collected data).</strong></li>
+</ul>
+
+<p>The data undergoes preprocessing, which involves cleaning (removing silence or background noise) and converting the raw <code>.wav</code> files into Mel Spectrograms using libraries like Librosa before being fed into the machine learning model.</p>
+
+<h2>4. Hosting: Server Setup and How-To</h2>
+
+<p>To make the model accessible, it logic is currently exposed via a backend server.</p>
+
+<h3>How to Run Locally / Connect to the Server</h3>
+
+<ol>
+    <li><strong>Environment Setup:</strong> 
+        <ul>
+            <li>Ensure Python 3.x is installed.</li>
+            <li>Install the required dependencies from the project root:
+<pre><code>pip install -r backend/requirements.txt</code></pre>
+            </li>
+        </ul>
+    </li>
+    <li><strong>Running the Backend:</strong>
+        <ul>
+            <li>Navigate to the backend directory.</li>
+            <li>Execute the main application script (e.g., if using Flask/FastAPI):
+<pre><code>python app.py  # Replace with actual script name if different</code></pre>
+            </li>
+            <li>The server typically runs on <code>http://localhost:5000</code> or <code>http://localhost:8000</code>.</li>
+        </ul>
+    </li>
+    <li><strong>Using the API:</strong>
+        <ul>
+            <li>You can send a POST request with an audio file to the model's prediction endpoint (e.g., <code>/predict</code>).</li>
+            <li>The backend will process the audio, extract the Mel spectrogram, pass it through the trained Support Vector Machine (SVC) model, and return a JSON response with the predicted label.</li>
+        </ul>
+    </li>
+</ol>
+
+<h2>5. Future Work (Timeline: 3-4 Weeks)</h2>
+
+<p>The next major phase is to transition this analytical model into an accessible, user-friendly tool.</p>
+
+<h3>Output as a Mobile Application</h3>
+<p>Over the next 3-4 weeks, the primary goal is to develop a mobile application (the frontend components are currently underway in <code>frontend/App.js</code> using React Native or a similar framework).</p>
+
+<p><strong>Key features for the app will include:</strong></p>
+<ul>
+    <li><strong>Real-time Audio Capture:</strong> Allowing users to record the baby's cry directly through the app.</li>
+    <li><strong>Instant Analysis:</strong> seamless integration with the backend server to provide near-instantaneous predictions.</li>
+    <li><strong>User Feedback Loop:</strong> A feature for parents to confirm or correct the model's prediction, which could be used for future model fine-tuning.</li>
+    <li><strong>Logging:</strong> A history tracker of the infant's cries and predicted needs.</li>
+</ul>
+
+<p>This application will bridge the gap between complex machine learning audio analysis and practical, everyday utility for parents.</p>
+
+</body>
+</html>
