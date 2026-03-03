@@ -1,5 +1,6 @@
 import os
 import io
+import tempfile
 import librosa
 import numpy as np
 import joblib
@@ -23,10 +24,21 @@ except Exception as e:
     print(f"Error loading models: {e}")
     svm_model = None
 
-def preprocess_audio(file_stream):
-    y, sr = librosa.load(file_stream, sr=SR)
-    y, _ = librosa.effects.trim(y)
-    return y, sr
+def preprocess_audio(file_obj):
+    # librosa.load with file-like objects only works for formats supported by soundfile (WAV, FLAC, OGG)
+    # Since React Native records in .m4a and web records in .webm, we need to save to a temp file first.
+    ext = os.path.splitext(file_obj.filename)[1]
+    temp_fd, temp_path = tempfile.mkstemp(suffix=ext)
+    os.close(temp_fd)
+    
+    try:
+        file_obj.save(temp_path)
+        y, sr = librosa.load(temp_path, sr=SR)
+        y, _ = librosa.effects.trim(y)
+        return y, sr
+    finally:
+        if os.path.exists(temp_path):
+            os.remove(temp_path)
 
 def extract_features(y, sr):
     # MFCCs

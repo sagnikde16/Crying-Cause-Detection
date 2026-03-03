@@ -1,4 +1,4 @@
-
+import {API_URL} from '../../constants.js'
 import React, { useState } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import { Button, Text, ActivityIndicator, MD2Colors } from 'react-native-paper';
@@ -33,10 +33,7 @@ export default function AudioUploader({ onPrediction }) {
     const uploadAudio = async (asset) => {
         setLoading(true);
         // Determine API URL based on platform
-        let apiUrl = 'http://localhost:5000/predict';
-        if (Platform.OS === 'android') {
-            apiUrl = 'http://10.0.2.2:5000/predict';
-        }
+        let apiUrl = `${API_URL}/predict`;
 
         const formData = new FormData();
 

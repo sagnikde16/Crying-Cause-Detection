@@ -1,4 +1,4 @@
-
+import { API_URL } from '../../constants.js';
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
@@ -61,7 +61,7 @@ export default function AudioRecorder({ onPrediction }) {
       };
 
       mediaRecorderRef.current.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
         uploadAudioWeb(audioBlob);
       };
 
@@ -99,13 +99,13 @@ export default function AudioRecorder({ onPrediction }) {
     // Use localhost for emulator, but for physical device use your IP
     // For web on same machine, localhost works. 
     // For Android Emulator, 10.0.2.2 points to host localhost.
-    let apiUrl = Platform.OS === 'android' ? 'http://10.0.2.2:5000/predict' : 'http://localhost:5000/predict';
+    let apiUrl = `${API_URL}/predict`;
 
     let formData = new FormData();
     formData.append('file', {
       uri,
-      name: 'recording.wav',
-      type: 'audio/wav',
+      name: 'recording.m4a',
+      type: 'audio/m4a',
     });
 
     try {
@@ -125,10 +125,10 @@ export default function AudioRecorder({ onPrediction }) {
 
   const uploadAudioWeb = async (blob) => {
     setLoading(true);
-    let apiUrl = 'http://localhost:5000/predict';
-
+    let apiUrl = `${API_URL}/predict`;
+    console.log(blob);
     let formData = new FormData();
-    formData.append('file', blob, 'recording.wav');
+    formData.append('file', blob, 'recording.webm');
 
     try {
       console.log('Uploading blob to', apiUrl);
