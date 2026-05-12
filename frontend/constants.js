@@ -9,4 +9,4 @@
 //   web: `http://${DEV_LOCAL_IP}:5000`,
 //   default: `http://${DEV_LOCAL_IP}:5000`
 // });
-export const API_URL = 'https://crying-cause-backend.onrender.com';
+export const API_URL = 'http://localhost:5000';
