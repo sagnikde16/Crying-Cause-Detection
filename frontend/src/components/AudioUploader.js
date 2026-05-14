@@ -1,9 +1,10 @@
 import {API_URL} from '../../constants.js'
 import React, { useState } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
-import { Button, Text, ActivityIndicator, MD2Colors } from 'react-native-paper';
+import { Button, Text, ActivityIndicator } from 'react-native-paper';
 import * as DocumentPicker from 'expo-document-picker';
 import axios from 'axios';
+import { colors } from '../theme/colors';
 
 export default function AudioUploader({ onPrediction }) {
     const [loading, setLoading] = useState(false);
@@ -90,8 +91,8 @@ export default function AudioUploader({ onPrediction }) {
                 disabled={loading}
                 style={styles.button}
                 labelStyle={styles.buttonLabel}
-                buttonColor="#6200ee"
-                textColor="#ffffff"
+                buttonColor={colors.uploadButton}
+                textColor={colors.surfaceCard}
             >
                 Upload Audio File
             </Button>
@@ -100,7 +101,7 @@ export default function AudioUploader({ onPrediction }) {
                     <Text style={styles.fileName}>Selected: {fileName}</Text>
                 </View>
             )}
-            {loading && <ActivityIndicator animating={true} color={MD2Colors.red800} style={styles.loader} />}
+            {loading && <ActivityIndicator animating={true} color={colors.accentDeep} style={styles.loader} />}
         </View>
     );
 }
@@ -125,17 +126,17 @@ const styles = StyleSheet.create({
     },
     fileContainer: {
         marginTop: 10,
-        padding: 8,
-        backgroundColor: '#e3f2fd',
-        borderRadius: 8,
+        padding: 10,
+        backgroundColor: colors.accentMuted,
+        borderRadius: 12,
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#bbdefb',
+        borderColor: colors.borderSoft,
     },
     fileName: {
-        fontSize: 14,
-        color: '#1565c0',
-        fontWeight: '500',
+        fontSize: 13,
+        color: colors.accentDeep,
+        fontWeight: '600',
     },
     loader: {
         marginTop: 10,

@@ -2,13 +2,16 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Provider as PaperProvider } from 'react-native-paper';
-import HomeScreen from './src/screens/HomeScreen';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import RootTabs from './src/navigation/RootTabs';
 
 export default function App() {
   return (
     <PaperProvider>
-      <HomeScreen />
-      <StatusBar style="auto" />
+      <SafeAreaProvider>
+        <RootTabs />
+      </SafeAreaProvider>
+      <StatusBar style="light" />
     </PaperProvider>
   );
 }

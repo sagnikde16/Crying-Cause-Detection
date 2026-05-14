@@ -4,8 +4,9 @@ import { View, StyleSheet, Platform, TouchableOpacity } from 'react-native';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 import axios from 'axios';
-import { ActivityIndicator, MD2Colors, Text, Icon } from 'react-native-paper';
+import { ActivityIndicator, Text, Icon } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
+import { colors } from '../theme/colors';
 
 export default function AudioRecorder({ onPrediction }) {
   const [recording, setRecording] = useState();
@@ -154,7 +155,7 @@ export default function AudioRecorder({ onPrediction }) {
         style={styles.touchable}
       >
         <LinearGradient
-          colors={isRecording ? ['#ff5252', '#d32f2f'] : ['#448aff', '#2979ff']}
+          colors={isRecording ? colors.recordActive : colors.recordIdle}
           style={styles.gradientButton}
         >
           <View style={styles.innerContent}>
@@ -169,7 +170,7 @@ export default function AudioRecorder({ onPrediction }) {
           </View>
         </LinearGradient>
       </TouchableOpacity>
-      {loading && <ActivityIndicator animating={true} color={MD2Colors.red800} style={styles.loader} />}
+      {loading && <ActivityIndicator animating={true} color={colors.accentDeep} style={styles.loader} />}
     </View>
   );
 }

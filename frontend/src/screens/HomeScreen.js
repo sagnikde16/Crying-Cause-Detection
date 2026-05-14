@@ -1,17 +1,15 @@
 
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Image, Dimensions } from 'react-native';
-import { Appbar, Card, Title, Paragraph, Button, Text, Divider, useTheme, IconButton } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Image } from 'react-native';
+import { Appbar, Card, Title, Paragraph, Button, Text, Divider, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Animatable from 'react-native-animatable';
 import AudioRecorder from '../components/AudioRecorder';
 import AudioUploader from '../components/AudioUploader';
-
-const { width } = Dimensions.get('window');
+import { colors } from '../theme/colors';
 
 export default function HomeScreen() {
     const [prediction, setPrediction] = useState(null);
-    const theme = useTheme();
 
     const handlePrediction = (result) => {
         setPrediction(result);
@@ -37,7 +35,7 @@ export default function HomeScreen() {
 
     return (
         <LinearGradient
-            colors={['#4c669f', '#3b5998', '#192f6a']}
+            colors={colors.gradient}
             style={styles.container}
         >
             <Appbar.Header style={styles.header}>
@@ -46,11 +44,30 @@ export default function HomeScreen() {
 
             <ScrollView contentContainerStyle={styles.content}>
                 <Animatable.View animation="fadeInDown" duration={1000} style={styles.introContainer}>
-                    <Text style={styles.introTitle}>Understanding Your Baby</Text>
-                    <Text style={styles.introText}>
-                        Babies cry to communicate. Record a cry or upload an audio file to find out if they are hungry, tired, or in pain.
-                    </Text>
+                    <View style={styles.introGlass}>
+                        <Text style={styles.introTitle}>Understanding your baby</Text>
+                        <Text style={styles.introText}>
+                            Babies cry to communicate. Record a cry or upload an audio file to get a gentle read on hunger, tiredness, or discomfort.
+                        </Text>
+                    </View>
                 </Animatable.View>
+
+                <View style={styles.heroRow}>
+                    <View style={styles.heroFrame}>
+                        <Image
+                            source={require('../../assets/icon.png')}
+                            style={styles.heroImage}
+                            resizeMode="contain"
+                        />
+                    </View>
+                    <View style={styles.heroFrame}>
+                        <Image
+                            source={require('../../assets/splash-icon.png')}
+                            style={styles.heroImage}
+                            resizeMode="contain"
+                        />
+                    </View>
+                </View>
 
                 {!prediction ? (
                     <Animatable.View animation="fadeInUp" duration={1000} delay={300}>
@@ -81,7 +98,7 @@ export default function HomeScreen() {
                     <Animatable.View animation="zoomIn" duration={800} style={styles.resultContainer}>
                         <Card style={[styles.card, styles.resultCard]}>
                             <LinearGradient
-                                colors={['#ffffff', '#f0f4f8']}
+                                colors={[colors.surfaceCard, colors.surface]}
                                 style={styles.resultGradient}
                             >
                                 <Card.Content style={styles.resultContent}>
@@ -91,14 +108,14 @@ export default function HomeScreen() {
                                         <IconButton
                                             icon={getIconForPrediction(prediction.prediction)}
                                             size={80}
-                                            iconColor={theme.colors.primary}
+                                            iconColor={colors.accent}
                                             style={styles.resultIcon}
                                         />
                                     </Animatable.View>
 
                                     <View style={styles.predictionContainer}>
                                         <Text style={styles.predictionLabel}>Cause:</Text>
-                                        <Text style={[styles.predictionValue, { color: theme.colors.primary }]}>
+                                        <Text style={[styles.predictionValue, { color: colors.accent }]}>
                                             {prediction.prediction}
                                         </Text>
                                     </View>
@@ -117,7 +134,7 @@ export default function HomeScreen() {
                                                     <View key={label} style={styles.probRow}>
                                                         <Text style={styles.probLabel}>{label}</Text>
                                                         <View style={styles.probBarContainer}>
-                                                            <View style={[styles.probBar, { width: `${prob * 100}%`, backgroundColor: theme.colors.primary }]} />
+                                                            <View style={[styles.probBar, { width: `${prob * 100}%`, backgroundColor: colors.accent }]} />
                                                         </View>
                                                         <Text style={styles.probValue}>{(prob * 100).toFixed(0)}%</Text>
                                                     </View>
@@ -130,9 +147,10 @@ export default function HomeScreen() {
                                         mode="contained"
                                         onPress={resetPrediction}
                                         style={styles.resetButton}
+                                        buttonColor={colors.accentDeep}
                                         icon="refresh"
                                     >
-                                        Analyze Another Cry
+                                        Analyze another cry
                                     </Button>
                                 </Card.Actions>
                             </LinearGradient>
@@ -153,47 +171,85 @@ const styles = StyleSheet.create({
         elevation: 0,
     },
     headerTitle: {
-        color: '#ffffff',
+        color: colors.textOnGradient,
         fontWeight: 'bold',
         fontSize: 22,
     },
     content: {
         padding: 20,
-        paddingBottom: 40,
+        paddingBottom: 88,
+    },
+    heroRow: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    heroFrame: {
+        width: 112,
+        height: 112,
+        borderRadius: 20,
+        padding: 10,
+        marginHorizontal: 7,
+        backgroundColor: 'rgba(255, 255, 255, 0.12)',
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.22)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    heroImage: {
+        width: '100%',
+        height: '100%',
     },
     introContainer: {
-        marginBottom: 30,
+        marginBottom: 18,
         alignItems: 'center',
-        paddingHorizontal: 10,
+        paddingHorizontal: 6,
+    },
+    introGlass: {
+        width: '100%',
+        maxWidth: 420,
+        paddingVertical: 18,
+        paddingHorizontal: 18,
+        borderRadius: 18,
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        borderWidth: 1,
+        borderColor: 'rgba(255, 255, 255, 0.18)',
     },
     introTitle: {
-        fontSize: 28,
-        fontWeight: 'bold',
-        color: '#ffffff',
+        fontSize: 26,
+        fontWeight: '700',
+        color: colors.textOnGradient,
         marginBottom: 10,
         textAlign: 'center',
-        textShadowColor: 'rgba(0, 0, 0, 0.3)',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 5,
+        letterSpacing: 0.3,
+        textShadowColor: 'rgba(0, 0, 0, 0.15)',
+        textShadowOffset: { width: 0, height: 1 },
+        textShadowRadius: 8,
     },
     introText: {
         textAlign: 'center',
-        color: '#e0e0e0',
-        fontSize: 16,
-        lineHeight: 24,
+        color: colors.textMuted,
+        fontSize: 15,
+        lineHeight: 23,
     },
     card: {
-        elevation: 8,
-        borderRadius: 20,
-        backgroundColor: '#ffffff',
+        elevation: 6,
+        borderRadius: 22,
+        backgroundColor: colors.surfaceCard,
         overflow: 'hidden',
+        shadowColor: '#1a2a24',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.14,
+        shadowRadius: 16,
     },
     cardTitle: {
         textAlign: 'center',
         marginBottom: 20,
-        color: '#3b5998',
-        fontSize: 22,
-        fontWeight: 'bold',
+        color: colors.textDark,
+        fontSize: 21,
+        fontWeight: '700',
+        letterSpacing: 0.2,
     },
     actionContainer: {
         alignItems: 'center',
@@ -204,12 +260,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     sectionLabel: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: '#888',
+        fontSize: 12,
+        fontWeight: '700',
+        color: colors.textSoft,
         marginBottom: 10,
         textTransform: 'uppercase',
-        letterSpacing: 1,
+        letterSpacing: 1.2,
     },
     orContainer: {
         flexDirection: 'row',
@@ -220,12 +276,14 @@ const styles = StyleSheet.create({
     divider: {
         flex: 1,
         height: 1,
-        backgroundColor: '#ddd',
+        backgroundColor: colors.borderSoft,
     },
     orText: {
         marginHorizontal: 10,
-        color: '#aaa',
-        fontWeight: 'bold',
+        color: colors.textSoft,
+        fontWeight: '600',
+        fontSize: 12,
+        letterSpacing: 1,
     },
     resultContainer: {
         alignItems: 'center',
@@ -242,53 +300,53 @@ const styles = StyleSheet.create({
         paddingVertical: 25,
     },
     resultTitle: {
-        fontSize: 24,
-        color: '#333',
+        fontSize: 22,
+        color: colors.textDark,
         marginBottom: 15,
-        fontWeight: 'bold',
+        fontWeight: '700',
     },
     resultIcon: {
         margin: 0,
-        backgroundColor: 'rgba(98, 0, 238, 0.1)',
+        backgroundColor: colors.accentMuted,
     },
     predictionContainer: {
         alignItems: 'center',
         marginVertical: 10,
     },
     predictionLabel: {
-        fontSize: 16,
-        color: '#666',
+        fontSize: 13,
+        color: colors.textSoft,
         textTransform: 'uppercase',
-        letterSpacing: 1,
+        letterSpacing: 1.2,
+        fontWeight: '600',
     },
     predictionValue: {
-        fontSize: 42,
-        fontWeight: 'bold',
+        fontSize: 36,
+        fontWeight: '700',
         textTransform: 'capitalize',
-        marginVertical: 5,
-        textShadowColor: 'rgba(0, 0, 0, 0.1)',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 2,
+        marginVertical: 6,
+        letterSpacing: 0.3,
     },
     confidenceText: {
-        fontSize: 18,
-        color: '#555',
-        marginBottom: 25,
+        fontSize: 16,
+        color: colors.textSoft,
+        marginBottom: 22,
     },
     probabilitiesContainer: {
         width: '100%',
-        backgroundColor: '#fff',
+        backgroundColor: colors.surface,
         padding: 15,
-        borderRadius: 12,
+        borderRadius: 14,
         marginTop: 10,
         borderWidth: 1,
-        borderColor: '#eee',
+        borderColor: colors.borderSoft,
     },
     probTitle: {
-        fontWeight: 'bold',
+        fontWeight: '700',
         marginBottom: 12,
-        color: '#444',
-        fontSize: 14,
+        color: colors.textDark,
+        fontSize: 13,
+        letterSpacing: 0.2,
     },
     probRow: {
         flexDirection: 'row',
@@ -297,26 +355,26 @@ const styles = StyleSheet.create({
     },
     probLabel: {
         width: 80,
-        fontSize: 14,
-        color: '#666',
+        fontSize: 13,
+        color: colors.textSoft,
         textTransform: 'capitalize',
     },
     probBarContainer: {
         flex: 1,
         height: 8,
-        backgroundColor: '#f0f0f0',
-        borderRadius: 4,
+        backgroundColor: colors.accentMuted,
+        borderRadius: 6,
         marginHorizontal: 10,
         overflow: 'hidden',
     },
     probBar: {
         height: '100%',
-        borderRadius: 4,
+        borderRadius: 6,
     },
     probValue: {
         width: 40,
         fontSize: 12,
-        color: '#888',
+        color: colors.textSoft,
         textAlign: 'right',
     },
     cardActions: {
@@ -324,9 +382,9 @@ const styles = StyleSheet.create({
         paddingBottom: 25,
     },
     resetButton: {
-        paddingHorizontal: 25,
-        paddingVertical: 5,
-        borderRadius: 25,
-        elevation: 4,
+        paddingHorizontal: 22,
+        paddingVertical: 4,
+        borderRadius: 22,
+        elevation: 2,
     },
 });
